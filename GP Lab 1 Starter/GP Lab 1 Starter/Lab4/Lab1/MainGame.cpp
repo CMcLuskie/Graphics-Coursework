@@ -9,14 +9,8 @@ Transform transform;
 MainGame::MainGame()
 {
 	_gameState = GameState::PLAY;
-	Display* _gameDisplay = new Display(); //new display
-    Mesh* mesh1();
-	Mesh* mesh2();
-	Audio* audioDevice();
-	Texture* brickTexture();
-	Texture* waterTexture();
-	Shader* standard();
 	
+	CreatePointers();
 }
 
 MainGame::~MainGame()
@@ -29,22 +23,51 @@ void MainGame::run()
 	gameLoop();
 }
 
+void MainGame::CreatePointers()
+{
+	Display* _gameDisplay = new Display(); //new display
+	Mesh* mesh1();
+	Mesh* mesh2();
+	Mesh* mesh3();
+	Audio* audioDevice();
+	Texture* brickTexture();
+	Texture* waterTexture();
+	Shader* standard();
+	Shader* noise();
+	Shader* blur();
+	Shader* rim();
+	Shader* toon();
+}
 void MainGame::initSystems()
 {
 	_gameDisplay.initDisplay(); 
 	whistle = audioDevice.loadSound("..\\res\\bang.wav");
 	backGroundMusic = audioDevice.loadSound("..\\res\\background.wav");
 	
-	mesh1.loadModel("..\\res\\monkey3.obj");
-	mesh2.loadModel("..\\res\\monkey3.obj");
-
-	standardShader.Initialise("..\\res\\shader.vert", "..\\res\\shader.frag");
+	
+	LoadModels();
+	InitialiseShaders();
 	
 	myCamera.initCamera(glm::vec3(0, 0, -5), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
 
 	counter = 1.0f;
 }
 
+void MainGame::LoadModels()
+{
+	mesh1.loadModel("..\\res\\Models\\tree.obj");
+	mesh2.loadModel("..\\res\\Models\\monkey3.obj");
+	mesh3.loadModel("..\\res\\Models\\Pokemon.obj");
+}
+
+void  MainGame::InitialiseShaders()
+{
+	standardShader.Initialise("..\\res\\shader.vert", "..\\res\\shader.frag");
+	noiseShader.Initialise("..\\res\\shaderNoise.vert", "..\\res\\shaderNoise.frag");
+	blurShader.Initialise("..\\res\\shaderBlur.vert", "..\\res\\shaderBlur.frag");
+	rimShader.Initialise("..\\res\\shaderRim.vert", "..\\res\\shaderRim.frag");
+	toonShader.Initialise("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag");
+}
 void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
@@ -123,6 +146,10 @@ void MainGame::UpdateShader(ShaderTypes shader)
 		standardShader.Bind();
 		standardShader.Update(transform, myCamera);
 		break;
+	case Noise:
+		noiseShader.Bind();
+		noiseShader.Update(transform, myCamera);
+		break;
 	}
 }
 
@@ -139,9 +166,9 @@ void MainGame::drawGame()
 	LoadTextures();
 	
 
-	UpdateModel(glm::vec3(sinf(counter), 0.5, 0.0),
-		glm::vec3(0.0, 0.0, counter * 5),
-		glm::vec3(0.6, 0.6, 0.6));
+	UpdateModel(glm::vec3(-1.5, 0.5, 0.5),
+		glm::vec3(0.0, counter * 2.0,0),
+		glm::vec3(0.1, 0.1, 0.1));
 
 	UpdateShader(mesh1Shader);
 	brickTexture.Bind(0);
@@ -151,17 +178,28 @@ void MainGame::drawGame()
 
 	
 
-	UpdateModel(glm::vec3(-sinf(counter), -0.5, -sinf(counter) * 5),
-		glm::vec3(0.0, 0.0, counter * 5),
+	UpdateModel(glm::vec3(2, 0.5, 0.5),
+		glm::vec3(0.0, counter * 2, 0),
 		glm::vec3(0.6, 0.6, 0.6));
 
 	UpdateShader(mesh2Shader);
 	brickTexture.Bind(0);
 	mesh2.draw();
 	mesh2.updateSphereData(*transform.GetPos(), 0.62f);
-	counter = counter + 0.05f;
 
 				
+	UpdateModel(glm::vec3(.5, .5, 0.5),
+		glm::vec3(0.0, counter * 2, 0 ),
+		glm::vec3(0.6, 0.6, 0.6));
+
+	UpdateShader(mesh3Shader);
+	brickTexture.Bind(0);
+	mesh3.draw();
+	mesh3.updateSphereData(*transform.GetPos(), 0.62f);
+
+
+	counter = counter + 0.05f;
+
 	glEnableClientState(GL_COLOR_ARRAY); 
 	glEnd();
 

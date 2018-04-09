@@ -17,7 +17,7 @@ public:
 	~MainGame();
 
 	void run();
-	enum ShaderTypes { standard };
+	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon };
 
 private:
 	ShaderTypes mesh1Shader;
@@ -28,6 +28,9 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
+	void CreatePointers();
+	void LoadModels();
+	void InitialiseShaders();
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void playAudio(unsigned int Source, glm::vec3 pos);
 	void UpdateModel(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
@@ -38,6 +41,7 @@ private:
 	GameState _gameState;
 	Mesh mesh1;
 	Mesh mesh2;
+	Mesh mesh3;
 	Camera myCamera;
 	Audio audioDevice;
 
@@ -49,5 +53,9 @@ private:
 	Texture waterTexture;
 
 	Shader standardShader;
+	Shader noiseShader;
+	Shader blurShader;
+	Shader rimShader;
+	Shader toonShader;
 };
 
