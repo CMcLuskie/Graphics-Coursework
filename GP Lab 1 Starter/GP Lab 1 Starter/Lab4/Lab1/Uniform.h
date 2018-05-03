@@ -1,6 +1,7 @@
 #pragma once
 #include"Shader.h"
 #include "Camera.h"
+#include "MainGame.h"
 struct Uniform
 {
 public:
@@ -9,9 +10,10 @@ public:
 
 	void SetRimToon(Shader shader,Camera camera )
 	{
-	shader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
-	shader.SetMatrix4("u_vm", camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	shader.SetMatrix4("u_pm", camera.GetViewProjection());
+		
+		shader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+		shader.SetMatrix4("u_vm", camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+		shader.SetMatrix4("u_pm", camera.GetViewProjection());
 
 	}
 };

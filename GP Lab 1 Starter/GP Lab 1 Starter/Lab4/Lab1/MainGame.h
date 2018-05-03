@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "transform.h"
 #include "Audio.h"
+#include "Uniform.h"
 
 enum class GameState{PLAY, EXIT};
 
@@ -18,6 +19,13 @@ public:
 
 	void run();
 	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon };
+
+	Shader standardShader;
+	Shader noiseShader;
+	Shader blurShader;
+	Shader rimShader;
+	Shader toonShader;
+	Shader rimToonShader;
 
 private:
 	ShaderTypes mesh1Shader;
@@ -36,6 +44,7 @@ private:
 	void UpdateModel(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
 	void UpdateShader(ShaderTypes shader);
 	void LoadTextures();
+	void SetRimToon();
 
 	Display _gameDisplay;
 	GameState _gameState;
@@ -52,11 +61,7 @@ private:
 	Texture brickTexture;
 	Texture waterTexture;
 
-	Shader standardShader;
-	Shader noiseShader;
-	Shader blurShader;
-	Shader rimShader;
-	Shader toonShader;
-	Shader rimToonShader;
+	
+//	Uniform uniform;
 };
 

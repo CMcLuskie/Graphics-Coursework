@@ -197,13 +197,24 @@ void MainGame::UpdateShader(ShaderTypes shader)
 		toonShader.Update(transform, myCamera);
 		break;
 	case RimToon:
+
 		rimToonShader.Bind();
+		SetRimToon();
+
 		rimToonShader.Update(transform, myCamera);
 		break;
 
 	}
 }
 
+ void MainGame::SetRimToon()
+{
+
+	rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	rimToonShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	rimToonShader.SetMatrix4("u_pm", myCamera.GetViewProjection());
+
+}
 void MainGame::LoadTextures() 
 {
 	brickTexture.LoadTexture("..\\res\\bricks.jpg");
