@@ -37,6 +37,7 @@ void MainGame::CreatePointers()
 	Shader* blur();
 	Shader* rim();
 	Shader* toon();
+	Shader* rimToon();
 }
 void MainGame::initSystems()
 {
@@ -62,11 +63,17 @@ void MainGame::LoadModels()
 
 void  MainGame::InitialiseShaders()
 {
-	standardShader.Initialise("..\\res\\shader.vert", "..\\res\\shader.frag");
-	noiseShader.Initialise("..\\res\\shaderNoise.vert", "..\\res\\shaderNoise.frag");
-	blurShader.Initialise("..\\res\\shaderBlur.vert", "..\\res\\shaderBlur.frag");
-	rimShader.Initialise("..\\res\\shaderRim.vert", "..\\res\\shaderRim.frag");
-	toonShader.Initialise("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag");
+	standardShader.Initialise("..\\res\\Shaders\\shader.vert", "..\\res\\Shaders\\shader.frag");
+	noiseShader.Initialise("..\\res\\Shaders\\shaderNoise.vert", "..\\res\\Shaders\\shaderNoise.frag");
+	blurShader.Initialise("..\\res\\Shaders\\shaderBlur.vert", "..\\res\\Shaders\\shaderBlur.frag");
+	rimShader.Initialise("..\\res\\Shaders\\shaderRim.vert", "..\\res\\Shaders\\shaderRim.frag");
+	toonShader.Initialise("..\\res\\Shaders\\shaderToon.vert", "..\\res\\Shaders\\shaderToon.frag");
+	rimToonShader.Initialise("..\\res\\Shaders\\shaderRimToon.vert", "..\\res\\Shaders\\shaderRimToon.frag");
+
+
+	mesh1Shader = Standard;
+	mesh2Shader = Rim;
+	mesh3Shader = Toon;
 }
 void MainGame::gameLoop()
 {
@@ -87,8 +94,39 @@ void MainGame::processInput()
 	{
 		switch (evnt.type)
 		{
-			case SDL_QUIT:
-				_gameState = GameState::EXIT;
+			case SDL_KEYDOWN:
+				switch (evnt.key.keysym.sym)
+				{
+				case SDLK_ESCAPE:
+					_gameState = GameState::EXIT;
+
+					break;
+				case SDLK_0:
+					mesh1Shader = Standard;
+					mesh2Shader = Standard;
+					mesh3Shader = Standard;
+					break;
+				case SDLK_1:
+					mesh1Shader = Blur;
+					mesh2Shader = Blur;
+					mesh3Shader = Blur;
+					break;
+				case SDLK_2:
+					mesh1Shader = Rim;
+					mesh2Shader = Rim;
+					mesh3Shader = Rim;
+					break;
+				case SDLK_3:
+					mesh1Shader = Toon;
+					mesh2Shader = Toon;
+					mesh3Shader = Toon;
+					break;
+				case SDLK_4:
+					mesh1Shader = RimToon;
+					mesh2Shader = RimToon;
+					mesh3Shader = RimToon;
+					break;
+				}
 				break;
 		}
 	}
@@ -146,10 +184,23 @@ void MainGame::UpdateShader(ShaderTypes shader)
 		standardShader.Bind();
 		standardShader.Update(transform, myCamera);
 		break;
-	case Noise:
-		noiseShader.Bind();
-		noiseShader.Update(transform, myCamera);
+	case Blur:
+		blurShader.Bind();
+		blurShader.Update(transform, myCamera);
 		break;
+	case Rim:
+		rimShader.Bind();
+		rimShader.Update(transform, myCamera);
+		break;
+	case Toon:
+		toonShader.Bind();
+		toonShader.Update(transform, myCamera);
+		break;
+	case RimToon:
+		rimToonShader.Bind();
+		rimToonShader.Update(transform, myCamera);
+		break;
+
 	}
 }
 

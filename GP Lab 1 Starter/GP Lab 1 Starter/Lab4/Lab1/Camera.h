@@ -22,6 +22,16 @@ public:
 	{
 		return this->pos;
 	}
+	
+	inline glm::mat4 GetProj()
+	{
+		return projection;
+	}
+
+	inline glm::mat4 GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans()
+	{
+		return glm::lookAt(pos, pos + forward, up);
+	}
 
 	inline glm::mat4 GetViewProjection() const
 	{

@@ -19,6 +19,9 @@
     <Filter Include="Resource Files\Models">
       <UniqueIdentifier>{f7b64e1c-c08a-42b4-b1eb-d7993e60f694}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{97009267-7b6c-44af-9e93-306b3011b7c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -49,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Uniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,38 +92,9 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\res\shader.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shader.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderNoisefrag.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderNoisefrag.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderBlur.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderBlur.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderRim.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderRim.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderToon.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\res\shaderToon.vert">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClInclude Include="Uniform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\Models\tree.obj">
@@ -146,5 +123,43 @@
     <Image Include="..\res\buttons\changeShader3Unpressed.png">
       <Filter>Resource Files\Buttons</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\Shaders\shader.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shader.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderBlur.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderBlur.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderNoise.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderNoise.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderRim.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderRim.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderToon.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderToon.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderRimToon.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderRimToon.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

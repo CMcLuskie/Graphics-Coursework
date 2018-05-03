@@ -17,7 +17,7 @@ public:
 	~MainGame();
 
 	void run();
-	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon };
+	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon };
 
 private:
 	ShaderTypes mesh1Shader;
@@ -57,5 +57,6 @@ private:
 	Shader blurShader;
 	Shader rimShader;
 	Shader toonShader;
+	Shader rimToonShader;
 };
 

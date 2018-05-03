@@ -82,6 +82,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -95,18 +96,7 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="transform.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\res\shader.frag" />
-    <None Include="..\res\shader.vert" />
-    <None Include="..\res\shaderBlur.frag" />
-    <None Include="..\res\shaderBlur.vert" />
-    <None Include="..\res\shaderNoisefrag.frag" />
-    <None Include="..\res\shaderNoisefrag.vert" />
-    <None Include="..\res\shaderRim.frag" />
-    <None Include="..\res\shaderRim.vert" />
-    <None Include="..\res\shaderToon.frag" />
-    <None Include="..\res\shaderToon.vert" />
+    <ClInclude Include="Uniform.h" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\Models\tree.obj">
@@ -123,6 +113,20 @@
     <Image Include="..\res\buttons\changeShader2Unpressed.png" />
     <Image Include="..\res\buttons\changeShader3Pressed.png" />
     <Image Include="..\res\buttons\changeShader3Unpressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\Shaders\shader.frag" />
+    <None Include="..\res\Shaders\shader.vert" />
+    <None Include="..\res\Shaders\shaderBlur.frag" />
+    <None Include="..\res\Shaders\shaderBlur.vert" />
+    <None Include="..\res\Shaders\shaderNoise.frag" />
+    <None Include="..\res\Shaders\shaderNoise.vert" />
+    <None Include="..\res\Shaders\shaderRim.frag" />
+    <None Include="..\res\Shaders\shaderRim.vert" />
+    <None Include="..\res\Shaders\shaderRimToon.frag" />
+    <None Include="..\res\Shaders\shaderRimToon.vert" />
+    <None Include="..\res\Shaders\shaderToon.frag" />
+    <None Include="..\res\Shaders\shaderToon.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
