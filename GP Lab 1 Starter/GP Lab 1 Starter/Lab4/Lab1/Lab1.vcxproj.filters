@@ -176,5 +176,11 @@
     <None Include="..\res\Shaders\shaderExplode.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="..\res\Shaders\shaderToonFog.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderToonFog.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -5,6 +5,9 @@
 
 
 Transform transform;
+Transform mesh1Transform;
+Transform mesh2Transform;
+Transform mesh3Transform;
 
 MainGame::MainGame()
 {
@@ -37,9 +40,10 @@ void MainGame::CreatePointers()
 	Shader* blur();
 	Shader* rim();
 	Shader* toon();
-	Shader* rimToon();
+	Shader* rimToonShader();
 	Shader* ripple();
 	Shader* explode();
+	Shader* toonFog();
 	Transform* mesh1Trans();
 	Transform* mesh2Trans();
 	Transform* mesh3Trans();
@@ -90,13 +94,15 @@ void  MainGame::InitialiseShaders()
 	rimShader.Initialise("..\\res\\Shaders\\shaderRim.vert", "..\\res\\Shaders\\shaderRim.frag");
 	toonShader.Initialise("..\\res\\Shaders\\shaderToon.vert", "..\\res\\Shaders\\shaderToon.frag");
 	rimToonShader.Initialise("..\\res\\Shaders\\shaderRimToon.vert", "..\\res\\Shaders\\shaderRimToon.frag");
-	//ripple.Initialise("..\\res\\Shaders\\shaderToonRipple.vert", "..\\res\\Shaders\\shaderToonRipple.frag");
+	ripple.Initialise("..\\res\\Shaders\\shaderToonRipple.vert", "..\\res\\Shaders\\shaderToonRipple.frag");
 	explode.Initialise("..\\res\\Shaders\\shaderExplode.vert", "..\\res\\Shaders\\shaderExplode.frag", "..\\res\\Shaders\\shaderExplode.geom");
+	fog.Initialise("..\\res\\Shaders\\shaderToonFog.vert", "..\\res\\Shaders\\shaderToonFog.frag");
+
 
 
 
 	mesh1Shader = Standard;
-	mesh2Shader = Rim;
+	mesh2Shader = RimToon;
 	mesh3Shader = Toon;
 }
 void MainGame::gameLoop()
@@ -160,6 +166,11 @@ void MainGame::processInput()
 					mesh2Shader = Explode;
 					mesh3Shader = Explode;
 					break;
+				case SDLK_7:
+					mesh1Shader = Fog;
+					mesh2Shader = Fog;
+					mesh3Shader = Fog;
+					break;
 				}
 				break;
 		}
@@ -209,7 +220,7 @@ void MainGame::UpdateModel(Transform trans)
 
 }
 
-void MainGame::UpdateShader(ShaderTypes shader, Transform trans) 
+void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::mat4 model)
 {
 
 	switch (shader)
@@ -232,7 +243,7 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans)
 		break;
 	case RimToon:
 		rimToonShader.Bind();
-		SetRimToon(trans);
+		SetRimToon(trans, model);
 		rimToonShader.Update(transform, myCamera);
 		break;
 	case Ripple:
@@ -244,16 +255,20 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans)
 		SetExplosion(trans);
 		explode.Update(transform, myCamera);
 		break;
+	case Fog:
+		fog.Bind();
+		SetFog(trans);
+		fog.Update(transform, myCamera);
 	}
 }
 
- void MainGame::SetRimToon(Transform trans)
+ void MainGame::SetRimToon(Transform trans, glm::mat4 model)
 {
 
-	rimToonShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	rimToonShader.SetMatrix4("u_pm", myCamera.GetViewProjection());
-	rimToonShader.SetMatrix4("v_pos", trans.GetModel());
-	rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	 rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	 rimToonShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 rimToonShader.SetMatrix4("u_pm", myCamera.GetProj());
+	 rimToonShader.SetMatrix4("v_pos", model);
 
 }
 
@@ -267,11 +282,25 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans)
 	 explode.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
 	 explode.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
 	 explode.SetMatrix4("u_pm", myCamera.GetProj());
-	 explode.SetMatrix4("v_pos", trans.GetModel());
+	 explode.SetMatrix4("v_pos", mesh2Transform.GetModel());
 	 explode.SetFloat("time", 0.1f + (counter * 15));
 
  }
-void MainGame::LoadTextures() 
+
+ void MainGame::SetFog(Transform trans)
+ {
+	 fog.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+
+	 fog.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 fog.SetMatrix4("u_pm", myCamera.GetProj());
+
+	 fog.SetVector3("fogColor", glm::vec3(0.2, 0.2, 0.2));
+	 fog.SetFloat("minDist", -5.0f);
+	 fog.SetFloat("maxDist", 5.0f);
+
+ }
+
+ void MainGame::LoadTextures() 
 {
 	brickTexture.LoadTexture("..\\res\\bricks.jpg");
 	waterTexture.LoadTexture("..\\res\\water.jpg");
@@ -284,12 +313,12 @@ void MainGame::drawGame()
 	LoadTextures();
 	
 
-	UpdateTransforms(mesh1Transform, glm::vec3(-1.5, 0.5, 0.5),
-		glm::vec3(0.0, counter * 2.0,0),
+	UpdateTransforms(mesh1Transform, glm::vec3(sinf(counter), 0.5, 0.0),
+		glm::vec3(0.0, counter * 2, 0.0),
 		glm::vec3(0.1, 0.1, 0.1));
 
 	UpdateModel(mesh1Transform);
-	UpdateShader(mesh1Shader, mesh1Transform);
+	UpdateShader(mesh1Shader, mesh1Transform, mesh1Transform.GetModel());
 	brickTexture.Bind(0);
 	mesh1.draw();
 	mesh1.updateSphereData(*transform.GetPos(), 0.62f);
@@ -297,23 +326,23 @@ void MainGame::drawGame()
 
 	
 
-	UpdateTransforms(mesh2Transform, glm::vec3(2, 0.5, 0.5),
-		glm::vec3(0.0, counter * 2, 0),
+	UpdateTransforms(mesh2Transform, glm::vec3(-sinf(counter), -1.0, -sinf(counter) * 5),
+		glm::vec3(0.0, counter * 2, 0.0),
 		glm::vec3(0.6, 0.6, 0.6));
 
 	UpdateModel(mesh2Transform);
-	UpdateShader(mesh2Shader, mesh2Transform);
-	brickTexture.Bind(0);
+	UpdateShader(mesh2Shader, mesh2Transform, mesh2Transform.GetModel());
+	//brickTexture.Bind(0);
 	mesh2.draw();
 	mesh2.updateSphereData(*transform.GetPos(), 0.62f);
 
 				
-	UpdateTransforms(mesh3Transform, glm::vec3(.5, .5, 0.5),
-		glm::vec3(0.0, counter * 2, 0 ),
+	UpdateTransforms(mesh3Transform, glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)),
+		glm::vec3(glm::vec3(0.0, counter * 2, 0.0)),
 		glm::vec3(0.6, 0.6, 0.6));
 
 	UpdateModel(mesh3Transform);
-	UpdateShader(mesh3Shader, mesh3Transform);
+	UpdateShader(mesh3Shader, mesh3Transform, mesh3Transform.GetModel());
 	brickTexture.Bind(0);
 	mesh3.draw();
 	mesh3.updateSphereData(*transform.GetPos(), 0.62f);

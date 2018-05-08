@@ -130,6 +130,8 @@
     <None Include="..\res\Shaders\shaderRimToon.vert" />
     <None Include="..\res\Shaders\shaderToon.frag" />
     <None Include="..\res\Shaders\shaderToon.vert" />
+    <None Include="..\res\Shaders\shaderToonFog.frag" />
+    <None Include="..\res\Shaders\shaderToonFog.vert" />
     <None Include="..\res\Shaders\shaderToonRipple.frag" />
     <None Include="..\res\Shaders\shaderToonRipple.vert" />
   </ItemGroup>

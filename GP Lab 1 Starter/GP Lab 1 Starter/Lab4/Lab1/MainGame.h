@@ -8,7 +8,7 @@
 #include "transform.h"
 #include "Audio.h"
 #include "Uniform.h"
-
+#include <iostream>;
 enum class GameState{PLAY, EXIT};
 
 class MainGame
@@ -18,7 +18,7 @@ public:
 	~MainGame();
 
 	void run();
-	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode };
+	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode, Fog};
 
 	Shader standardShader;
 	Shader noiseShader;
@@ -28,15 +28,14 @@ public:
 	Shader rimToonShader;
 	Shader ripple;
 	Shader explode;
+	Shader fog;
 
 private:
 	ShaderTypes mesh1Shader;
 	ShaderTypes mesh2Shader;
 	ShaderTypes mesh3Shader;
 
-	Transform mesh1Transform;
-	Transform mesh2Transform;
-	Transform mesh3Transform;
+	
 
 	void initSystems();
 	void processInput();
@@ -50,11 +49,13 @@ private:
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void playAudio(unsigned int Source, glm::vec3 pos);
 	void UpdateModel(Transform trans);
-	void UpdateShader(ShaderTypes shader, Transform trans);
+	void UpdateShader(ShaderTypes shader, Transform trans, glm::mat4 model);
 	void LoadTextures();
-	void SetRimToon(Transform trans);
+
+	void SetRimToon(Transform trans, glm::mat4 model);
 	void SetRipple();
 	void SetExplosion(Transform trans);
+	void SetFog(Transform trans);
 
 	Display _gameDisplay;
 	GameState _gameState;

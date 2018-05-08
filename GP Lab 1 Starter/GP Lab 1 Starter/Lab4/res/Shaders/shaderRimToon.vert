@@ -6,7 +6,7 @@ layout (location = 2) in vec3 VertexNormal;
 uniform mat4 transform;
 
 out vec3 v_norm;
-out mat4 v_pos; 
+out vec4 v_pos; 
 
 void main()
 {
