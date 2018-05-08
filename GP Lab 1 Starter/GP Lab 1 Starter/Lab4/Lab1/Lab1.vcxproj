@@ -119,6 +119,9 @@
     <None Include="..\res\Shaders\shader.vert" />
     <None Include="..\res\Shaders\shaderBlur.frag" />
     <None Include="..\res\Shaders\shaderBlur.vert" />
+    <None Include="..\res\Shaders\shaderExplode.frag" />
+    <None Include="..\res\Shaders\shaderExplode.geom" />
+    <None Include="..\res\Shaders\shaderExplode.vert" />
     <None Include="..\res\Shaders\shaderNoise.frag" />
     <None Include="..\res\Shaders\shaderNoise.vert" />
     <None Include="..\res\Shaders\shaderRim.frag" />
@@ -127,6 +130,8 @@
     <None Include="..\res\Shaders\shaderRimToon.vert" />
     <None Include="..\res\Shaders\shaderToon.frag" />
     <None Include="..\res\Shaders\shaderToon.vert" />
+    <None Include="..\res\Shaders\shaderToonRipple.frag" />
+    <None Include="..\res\Shaders\shaderToonRipple.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

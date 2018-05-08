@@ -68,6 +68,7 @@ public:
 	glm::vec3 getSpherePos() { return meshSphere.GetPos(); }
 	float getSphereRadius() { return meshSphere.GetRadius(); }
 
+
 private:
 
 

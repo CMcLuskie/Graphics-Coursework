@@ -13,7 +13,7 @@ public:
 	void Bind(); //Set gpu to use our shaders
 	void Update(const Transform& transform, const Camera& camera);
 	void Initialise(const std::string vertexShader, const std::string fragShader);
-
+	void Initialise(const std::string vertexShader, const std::string fragShader, const std::string geometryShader);
 	std::string Shader::LoadShader(const std::string& fileName);
 	void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
 	GLuint Shader::CreateShader(const std::string& text, unsigned int type);
@@ -152,7 +152,7 @@ public:
 	}
 protected:
 private:
-	static const unsigned int NUM_SHADERS = 2; // number of shaders
+	static const unsigned int NUM_SHADERS = 3; // number of shaders
 
 	enum
 	{

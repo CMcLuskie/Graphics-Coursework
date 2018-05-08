@@ -18,7 +18,7 @@ public:
 	~MainGame();
 
 	void run();
-	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon };
+	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode };
 
 	Shader standardShader;
 	Shader noiseShader;
@@ -26,11 +26,17 @@ public:
 	Shader rimShader;
 	Shader toonShader;
 	Shader rimToonShader;
+	Shader ripple;
+	Shader explode;
 
 private:
 	ShaderTypes mesh1Shader;
 	ShaderTypes mesh2Shader;
 	ShaderTypes mesh3Shader;
+
+	Transform mesh1Transform;
+	Transform mesh2Transform;
+	Transform mesh3Transform;
 
 	void initSystems();
 	void processInput();
@@ -39,12 +45,16 @@ private:
 	void CreatePointers();
 	void LoadModels();
 	void InitialiseShaders();
+	void InitialiseTransforms();
+	void UpdateTransforms(Transform trans, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void playAudio(unsigned int Source, glm::vec3 pos);
-	void UpdateModel(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
-	void UpdateShader(ShaderTypes shader);
+	void UpdateModel(Transform trans);
+	void UpdateShader(ShaderTypes shader, Transform trans);
 	void LoadTextures();
-	void SetRimToon();
+	void SetRimToon(Transform trans);
+	void SetRipple();
+	void SetExplosion(Transform trans);
 
 	Display _gameDisplay;
 	GameState _gameState;

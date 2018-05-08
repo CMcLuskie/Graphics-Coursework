@@ -161,5 +161,20 @@
     <None Include="..\res\Shaders\shaderRimToon.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="..\res\Shaders\shaderToonRipple.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderToonRipple.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderExplode.geom">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderExplode.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderExplode.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

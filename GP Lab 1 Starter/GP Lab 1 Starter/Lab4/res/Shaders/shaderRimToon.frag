@@ -3,13 +3,13 @@
 uniform mat4 u_pm;
 uniform mat4 u_vm;
  
- uniform vec3 lightDir;
-varying vec3 normal;
+uniform vec3 lightDir;
+in vec3 normal;
 
 layout( location = 0 ) out vec4 fragcolor;
  
 in vec3 v_norm;
-in vec4 v_pos; 
+uniform mat4 v_pos; 
  
 void main() {
  
