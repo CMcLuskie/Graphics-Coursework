@@ -9,10 +9,11 @@ layout( location = 0 ) out vec4 fragcolor;
 in vec3 v_norm;
 uniform mat4 v_pos; 
  
+ uniform float zpos;
 void main() {
  
 	vec3 n = normalize(mat3(u_vm) * v_norm);      // convert normal to view space
-	vec3 p = vec3((u_pm) * v_pos);                // position in clip space
+	vec3 p = vec3((u_pm) * zpos);                // position in clip space
 	vec3 v = normalize(p);                        // normalised eye vector
 	float vdn = 0.6 - max(dot(v, n), 0.0);        // the rim contribution
 	

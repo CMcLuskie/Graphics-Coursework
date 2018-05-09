@@ -182,5 +182,11 @@
     <None Include="..\res\Shaders\shaderToonFog.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="..\res\Shaders\diffuseLighting.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\diffuseLighting.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

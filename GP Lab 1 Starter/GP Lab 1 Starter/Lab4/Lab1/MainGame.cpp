@@ -97,13 +97,14 @@ void  MainGame::InitialiseShaders()
 	//ripple.Initialise("..\\res\\Shaders\\shaderToonRipple.vert", "..\\res\\Shaders\\shaderToonRipple.frag");
 	explode.Initialise("..\\res\\Shaders\\shaderExplode.vert", "..\\res\\Shaders\\shaderExplode.frag", "..\\res\\Shaders\\shaderExplode.geom");
 	fog.Initialise("..\\res\\Shaders\\shaderToonFog.vert", "..\\res\\Shaders\\shaderToonFog.frag");
+	diffuse.Initialise("..\\res\\Shaders\\diffuseLighting.vert", "..\\res\\Shaders\\diffuseLighting.frag");
 
 
 
 
-	mesh1Shader = Standard;
-	mesh2Shader = RimToon;
-	mesh3Shader = Toon;
+	mesh1Shader = Diffuse;
+	mesh2Shader = Fog;
+	mesh3Shader = RimToon;
 }
 void MainGame::gameLoop()
 {
@@ -170,6 +171,11 @@ void MainGame::processInput()
 					mesh1Shader = Fog;
 					mesh2Shader = Fog;
 					mesh3Shader = Fog;
+					break;
+				case SDLK_8:
+					mesh1Shader = Diffuse;
+					mesh2Shader = Diffuse;
+					mesh3Shader = Diffuse;
 					break;
 				}
 				break;
@@ -243,7 +249,7 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 		break;
 	case RimToon:
 		rimToonShader.Bind();
-		SetRimToon(trans);
+		SetRimToon(trans, spherePos);
 		rimToonShader.Update(transform, myCamera);
 		break;
 	case Ripple:
@@ -259,16 +265,22 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 		fog.Bind();
 		SetFog(trans, spherePos);
 		fog.Update(transform, myCamera);
+		break;
+	case Diffuse:
+		diffuse.Bind();
+		SetDiffuse(trans, spherePos);
+		diffuse.Update(transform, myCamera);
 	}
 }
 
- void MainGame::SetRimToon(Transform trans)
+ void MainGame::SetRimToon(Transform trans, glm::vec3 spherePos)
 {
 
 	 rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
 	 rimToonShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
 	 rimToonShader.SetMatrix4("u_pm", myCamera.GetProj());
-	 rimToonShader.SetMatrix4("v_pos", trans.GetModel());
+	 //rimToonShader.SetMatrix4("v_pos", trans.GetModel());
+	 rimToonShader.SetFloat("zpos", spherePos.z);
 
 }
 
@@ -295,12 +307,18 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 	 fog.SetMatrix4("u_pm", myCamera.GetProj());
 
 
-	 fog.SetVector3("fogColor", glm::vec3(0.2, 0.2, 0.2));
+	 fog.SetVector3("fogColor", glm::vec3(1, 0, 1));
 	 fog.SetFloat("minDist", -5.0f);
 	 fog.SetFloat("maxDist", 5.0f);
 
 	 fog.SetFloat("zpos", spherePos.z);
 
+
+ }
+
+ void MainGame::SetDiffuse(Transform trans, glm::vec3 spherePos)
+ {
+	 diffuse.SetVector3("lightPos", spherePos);
 
  }
 

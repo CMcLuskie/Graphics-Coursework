@@ -115,6 +115,8 @@
     <Image Include="..\res\buttons\changeShader3Unpressed.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\res\Shaders\diffuseLighting.frag" />
+    <None Include="..\res\Shaders\diffuseLighting.vert" />
     <None Include="..\res\Shaders\shader.frag" />
     <None Include="..\res\Shaders\shader.vert" />
     <None Include="..\res\Shaders\shaderBlur.frag" />
