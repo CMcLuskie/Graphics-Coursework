@@ -44,27 +44,25 @@ void Shader::Initialise(const std::string vertexShader, const std::string fragSh
 
 void Shader::Initialise(const std::string vertexShader, const std::string fragShader, const std::string geometryShader)
 {
-		program = glCreateProgram(); // create shader program (openGL saves as ref number)
-	shaders[0] = CreateShader(LoadShader(vertexShader), GL_VERTEX_SHADER); // create vertex shader
-	shaders[1] = CreateShader(LoadShader(fragShader), GL_FRAGMENT_SHADER); // create fragment shader
-	shaders[2] = CreateShader(LoadShader(geometryShader), GL_GEOMETRY_SHADER);//create geometry shader
+	program = glCreateProgram();
+	shaders[0] = CreateShader(LoadShader(vertexShader), GL_VERTEX_SHADER);
+	shaders[1] = CreateShader(LoadShader(fragShader), GL_FRAGMENT_SHADER);
+	shaders[2] = CreateShader(LoadShader(geometryShader), GL_GEOMETRY_SHADER);
 
 	for (unsigned int i = 0; i < NUM_SHADERS; i++)
-	{
-		glAttachShader(program, shaders[i]); //add all our shaders to the shader program "shaders" 
-	}
+		glAttachShader(program, shaders[i]);
 
-	glBindAttribLocation(program, 0, "position"); // associate attribute variable with our shader program attribute (in this case attribute vec3 position;)
+	glBindAttribLocation(program, 0, "position");
 	glBindAttribLocation(program, 1, "texCoord");
 	glBindAttribLocation(program, 2, "normals");
 
-	glLinkProgram(program); //create executables that will run on the GPU shaders
-	CheckShaderError(program, GL_LINK_STATUS, true, "Error: Shader program linking failed"); // cheack for error
+	glLinkProgram(program);
+	CheckShaderError(program, GL_LINK_STATUS, true, "Error: Shader program cunting failed");
 
-	glValidateProgram(program); //check the entire program is valid
+	glValidateProgram(program);
 	CheckShaderError(program, GL_VALIDATE_STATUS, true, "Error: Shader program not valid");
 
-	uniforms[TRANSFORM_U] = glGetUniformLocation(program, "transform"); // associate with the location of uniform variable within a program
+	uniforms[TRANSFORM_U] = glGetUniformLocation(program, "transform");
 }
 
 void Shader::Bind()

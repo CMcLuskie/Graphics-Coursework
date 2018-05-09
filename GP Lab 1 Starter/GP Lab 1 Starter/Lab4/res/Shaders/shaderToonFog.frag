@@ -1,5 +1,7 @@
 #version 400
 
+layout (location = 0) out vec4 fragcolor;
+
 in vec3 v_norm;
 in vec4 v_pos; 
 
@@ -9,6 +11,7 @@ uniform vec3 fogColor;
 uniform mat4 u_pm; 
 uniform mat4 u_vm; 
 
+uniform float zpos;
 
 uniform float maxDist; //fog max distance
 uniform float minDist; //fog min distance
@@ -40,13 +43,13 @@ vec3 ToonRim() {
  void main() 
  {
 
-float dist = abs( v_pos.z );
+float dist = abs( zpos );
 float fogFactor = (maxDist - dist) / (maxDist - minDist);
 fogFactor = clamp( fogFactor, 0.0, 1.0 );
 vec3 toonRim = ToonRim();
 
 vec3 color = mix( fogColor, toonRim, fogFactor);
-FragColor = vec4(color, 1.0);
+fragcolor = vec4(color, 1.0);
 
 }
 

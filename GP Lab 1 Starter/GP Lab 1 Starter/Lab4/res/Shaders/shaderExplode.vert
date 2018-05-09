@@ -1,7 +1,16 @@
-#version 330 core
-layout (location = 0) in vec2 aPos;
+#version 400 
+
+layout (location = 0) in vec3 VertexPosition;
+layout (location = 2) in vec3 VertexNormal;
+
+uniform mat4 transform;
+
+out vec3 v_norm;
+out vec4 v_pos; 
 
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0); 
+	v_norm = VertexNormal;
+	v_pos = vec4(VertexPosition, 1.0);
+	gl_Position = transform * vec4(VertexPosition, 1.0);
 }

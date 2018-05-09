@@ -49,13 +49,13 @@ private:
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void playAudio(unsigned int Source, glm::vec3 pos);
 	void UpdateModel(Transform trans);
-	void UpdateShader(ShaderTypes shader, Transform trans, glm::mat4 model);
+	void UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spherePos);
 	void LoadTextures();
 
-	void SetRimToon(Transform trans, glm::mat4 model);
+	void SetRimToon(Transform trans);
 	void SetRipple();
 	void SetExplosion(Transform trans);
-	void SetFog(Transform trans);
+	void SetFog(Transform trans, glm::vec3 spherePos);
 
 	Display _gameDisplay;
 	GameState _gameState;
