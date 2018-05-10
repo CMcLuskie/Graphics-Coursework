@@ -18,7 +18,7 @@ public:
 	~MainGame();
 
 	void run();
-	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode, Fog, Diffuse};
+	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode, Fog, Diffuse, Blend, Glass};
 
 	Shader standardShader;
 	Shader noiseShader;
@@ -30,8 +30,11 @@ public:
 	Shader explode;
 	Shader fog;
 	Shader diffuse;
+	Shader blend;
+	Shader glass;
 
 private:
+
 	ShaderTypes mesh1Shader;
 	ShaderTypes mesh2Shader;
 	ShaderTypes mesh3Shader;
@@ -58,6 +61,7 @@ private:
 	void SetExplosion(Transform trans);
 	void SetFog(Transform trans, glm::vec3 spherePos);
 	void SetDiffuse(Transform trans, glm::vec3 spherePos);
+	void SetGlass(Transform trans);
 
 	Display _gameDisplay;
 	GameState _gameState;

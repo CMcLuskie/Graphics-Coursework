@@ -115,15 +115,23 @@
     <Image Include="..\res\buttons\changeShader3Unpressed.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\res\Lighting\blinnPhong.frag" />
+    <None Include="..\res\Lighting\blinnPhong.vert" />
+    <None Include="..\res\Lighting\diffuseLighting.frag" />
+    <None Include="..\res\Lighting\diffuseLighting.vert" />
     <None Include="..\res\Shaders\diffuseLighting.frag" />
     <None Include="..\res\Shaders\diffuseLighting.vert" />
     <None Include="..\res\Shaders\shader.frag" />
     <None Include="..\res\Shaders\shader.vert" />
+    <None Include="..\res\Shaders\shaderBlend.frag" />
+    <None Include="..\res\Shaders\shaderBlend.vert" />
     <None Include="..\res\Shaders\shaderBlur.frag" />
     <None Include="..\res\Shaders\shaderBlur.vert" />
     <None Include="..\res\Shaders\shaderExplode.frag" />
     <None Include="..\res\Shaders\shaderExplode.geom" />
     <None Include="..\res\Shaders\shaderExplode.vert" />
+    <None Include="..\res\Shaders\shaderGlass.frag" />
+    <None Include="..\res\Shaders\shaderGlass.vert" />
     <None Include="..\res\Shaders\shaderNoise.frag" />
     <None Include="..\res\Shaders\shaderNoise.vert" />
     <None Include="..\res\Shaders\shaderRim.frag" />

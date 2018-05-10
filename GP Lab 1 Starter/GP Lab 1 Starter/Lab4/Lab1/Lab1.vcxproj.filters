@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{97009267-7b6c-44af-9e93-306b3011b7c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Lighting">
+      <UniqueIdentifier>{a44c3ab3-772c-4fb0-bc59-9c5871809418}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -187,6 +190,30 @@
     </None>
     <None Include="..\res\Shaders\diffuseLighting.vert">
       <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderBlend.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderBlend.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderGlass.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderGlass.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Lighting\blinnPhong.frag">
+      <Filter>Resource Files\Lighting</Filter>
+    </None>
+    <None Include="..\res\Lighting\blinnPhong.vert">
+      <Filter>Resource Files\Lighting</Filter>
+    </None>
+    <None Include="..\res\Lighting\diffuseLighting.frag">
+      <Filter>Resource Files\Lighting</Filter>
+    </None>
+    <None Include="..\res\Lighting\diffuseLighting.vert">
+      <Filter>Resource Files\Lighting</Filter>
     </None>
   </ItemGroup>
 </Project>

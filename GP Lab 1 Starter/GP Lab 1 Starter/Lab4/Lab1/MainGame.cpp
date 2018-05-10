@@ -97,7 +97,13 @@ void  MainGame::InitialiseShaders()
 	//ripple.Initialise("..\\res\\Shaders\\shaderToonRipple.vert", "..\\res\\Shaders\\shaderToonRipple.frag");
 	explode.Initialise("..\\res\\Shaders\\shaderExplode.vert", "..\\res\\Shaders\\shaderExplode.frag", "..\\res\\Shaders\\shaderExplode.geom");
 	fog.Initialise("..\\res\\Shaders\\shaderToonFog.vert", "..\\res\\Shaders\\shaderToonFog.frag");
+	blend.Initialise("..\\res\\Shaders\\shaderBlend.vert", "..\\res\\Shaders\\shaderBlend.frag");
+	glass.Initialise("..\\res\\Shaders\\shaderGlass.vert", "..\\res\\Shaders\\shaderGlass.frag");
+
+	diffuse.Initialise("..\\res\\Lig\\diffuseLighting.vert", "..\\res\\Shaders\\diffuseLighting.frag");
 	diffuse.Initialise("..\\res\\Shaders\\diffuseLighting.vert", "..\\res\\Shaders\\diffuseLighting.frag");
+
+
 
 
 
@@ -158,9 +164,9 @@ void MainGame::processInput()
 					mesh3Shader = RimToon;
 					break;
 				case SDLK_5:
-					/*mesh1Shader = Ripple;
-					mesh2Shader = Ripple;
-					mesh3Shader = Ripple;*/
+					mesh1Shader = Glass;
+					mesh2Shader = Glass;
+					mesh3Shader = Glass;
 					break;
 				case SDLK_6:
 					mesh1Shader = Explode;
@@ -177,6 +183,12 @@ void MainGame::processInput()
 					mesh2Shader = Diffuse;
 					mesh3Shader = Diffuse;
 					break;
+				case SDLK_9:
+					mesh1Shader = Blend;
+					mesh2Shader = Blend;
+					mesh3Shader = Blend;
+					break;
+				
 				}
 				break;
 		}
@@ -270,6 +282,16 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 		diffuse.Bind();
 		SetDiffuse(trans, spherePos);
 		diffuse.Update(transform, myCamera);
+		break;
+	case Blend:
+		blend.Bind();
+		blend.Update(transform, myCamera);
+		break;
+	case Glass:
+		glass.Bind();
+		SetGlass(trans);
+		glass.Update(transform, myCamera);
+		break;
 	}
 }
 
@@ -279,8 +301,7 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 	 rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
 	 rimToonShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
 	 rimToonShader.SetMatrix4("u_pm", myCamera.GetProj());
-	 //rimToonShader.SetMatrix4("v_pos", trans.GetModel());
-	 rimToonShader.SetFloat("zpos", spherePos.z);
+	 rimToonShader.SetMatrix4("v_pos", transform.GetModel());
 
 }
 
@@ -314,6 +335,14 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 	 fog.SetFloat("zpos", spherePos.z);
 
 
+ }
+
+ void MainGame::SetGlass(Transform trans)
+ {
+	 glass.SetMatrix4("u_modelMatrix", trans.GetModel());
+	 glass.SetMatrix4("u_viewProjectionMatrix", myCamera.GetViewProjection());
+	 glass.SetMatrix4("u_normalMatrix", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 glass.SetVector4("u_camera", glm::vec4(myCamera.getPos().x, myCamera.getPos().y, myCamera.getPos().z, 1.0));
  }
 
  void MainGame::SetDiffuse(Transform trans, glm::vec3 spherePos)
