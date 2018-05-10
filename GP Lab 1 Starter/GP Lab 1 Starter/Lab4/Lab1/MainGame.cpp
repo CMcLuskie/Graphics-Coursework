@@ -102,7 +102,7 @@ void  MainGame::InitialiseShaders()
 
 
 
-	mesh1Shader = Diffuse;
+	mesh1Shader = Toon;
 	mesh2Shader = Fog;
 	mesh3Shader = RimToon;
 }
