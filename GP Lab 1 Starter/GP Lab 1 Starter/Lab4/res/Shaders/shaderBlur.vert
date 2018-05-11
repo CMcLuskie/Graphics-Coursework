@@ -1,9 +1,9 @@
-#version 400
+#version 130
 
 
-attribute vec3 position;
-attribute vec2 texCoord;
-attribute vec3 normals;
+out vec3 position;
+out vec2 texCoord;
+out vec3 normals;
 
 varying vec2 texCoord0;
 
