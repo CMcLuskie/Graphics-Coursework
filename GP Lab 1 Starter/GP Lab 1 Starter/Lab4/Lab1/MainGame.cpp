@@ -5,9 +5,9 @@
 
 
 Transform transform;
-Transform mesh1Transform;
-Transform mesh2Transform;
-Transform mesh3Transform;
+Transform treeTransform;
+Transform monkeyTransform;
+Transform ivysaurTransform;
 
 MainGame::MainGame()
 {
@@ -32,9 +32,13 @@ void MainGame::CreatePointers()
 	Mesh* mesh1();
 	Mesh* mesh2();
 	Mesh* mesh3();
+
 	Audio* audioDevice();
+	
 	Texture* brickTexture();
 	Texture* waterTexture();
+	Texture* grassTexture();
+	
 	Shader* standard();
 	Shader* noise();
 	Shader* blur();
@@ -44,6 +48,8 @@ void MainGame::CreatePointers()
 	Shader* ripple();
 	Shader* explode();
 	Shader* toonFog();
+	Shader* blinnPhon();
+	
 	Transform* mesh1Trans();
 	Transform* mesh2Trans();
 	Transform* mesh3Trans();
@@ -65,9 +71,9 @@ void MainGame::initSystems()
 
 void MainGame::LoadModels()
 {
-	mesh1.loadModel("..\\res\\Models\\tree.obj");
-	mesh2.loadModel("..\\res\\Models\\monkey3.obj");
-	mesh3.loadModel("..\\res\\Models\\Pokemon.obj");
+	tree.loadModel("..\\res\\Models\\tree.obj");
+	monkey.loadModel("..\\res\\Models\\monkey3.obj");
+	ivysaur.loadModel("..\\res\\Models\\Pokemon.obj");
 }
 
 
@@ -100,17 +106,17 @@ void  MainGame::InitialiseShaders()
 	blend.Initialise("..\\res\\Shaders\\shaderBlend.vert", "..\\res\\Shaders\\shaderBlend.frag");
 	glass.Initialise("..\\res\\Shaders\\shaderGlass.vert", "..\\res\\Shaders\\shaderGlass.frag");
 
-	diffuse.Initialise("..\\res\\Lig\\diffuseLighting.vert", "..\\res\\Shaders\\diffuseLighting.frag");
-	diffuse.Initialise("..\\res\\Shaders\\diffuseLighting.vert", "..\\res\\Shaders\\diffuseLighting.frag");
+	//diffuse.Initialise("..\\res\\Lighting\\diffuseLighting.vert", "..\\res\\Lighting\\diffuseLighting.frag");
+	blinnPhong.Initialise("..\\res\\Lighting\\blinnPhong.vert", "..\\res\\Lighting\\blinnPhong.frag");
 
 
 
 
 
 
-	mesh1Shader = Toon;
-	mesh2Shader = Fog;
-	mesh3Shader = RimToon;
+	treeShader = Explode;
+	monkeyShader = Fog;
+	ivysaurShader = RimToon;
 }
 void MainGame::gameLoop()
 {
@@ -118,7 +124,7 @@ void MainGame::gameLoop()
 	{
 		processInput();
 		drawGame();
-		collision(mesh1.getSpherePos(), mesh1.getSphereRadius(), mesh2.getSpherePos(), mesh2.getSphereRadius());
+		collision(tree.getSpherePos(), tree.getSphereRadius(), monkey.getSpherePos(), monkey.getSphereRadius());
 		//playAudio(backGroundMusic, glm::vec3(0.0f,0.0f,0.0f));
 	}
 }
@@ -139,54 +145,54 @@ void MainGame::processInput()
 
 					break;
 				case SDLK_0:
-					mesh1Shader = Standard;
-					mesh2Shader = Standard;
-					mesh3Shader = Standard;
+					treeShader = Standard;
+					monkeyShader = Standard;
+					ivysaurShader = Standard;
 					break;
 				case SDLK_1:
-					mesh1Shader = Blur;
-					mesh2Shader = Blur;
-					mesh3Shader = Blur;
+					treeShader = Blur;
+					monkeyShader = Blur;
+					ivysaurShader = Blur;
 					break;
 				case SDLK_2:
-					mesh1Shader = Rim;
-					mesh2Shader = Rim;
-					mesh3Shader = Rim;
+					treeShader = Rim;
+					monkeyShader = Rim;
+					ivysaurShader = Rim;
 					break;
 				case SDLK_3:
-					mesh1Shader = Toon;
-					mesh2Shader = Toon;
-					mesh3Shader = Toon;
+					treeShader = Toon;
+					monkeyShader = Toon;
+					ivysaurShader = Toon;
 					break;
 				case SDLK_4:
-					mesh1Shader = RimToon;
-					mesh2Shader = RimToon;
-					mesh3Shader = RimToon;
+					treeShader = RimToon;
+					monkeyShader = RimToon;
+					ivysaurShader = RimToon;
 					break;
 				case SDLK_5:
-					mesh1Shader = Glass;
-					mesh2Shader = Glass;
-					mesh3Shader = Glass;
+					treeShader = Glass;
+					monkeyShader = Glass;
+					ivysaurShader = Glass;
 					break;
 				case SDLK_6:
-					mesh1Shader = Explode;
-					mesh2Shader = Explode;
-					mesh3Shader = Explode;
+					treeShader = Explode;
+					monkeyShader = Explode;
+					ivysaurShader = Explode;
 					break;
 				case SDLK_7:
-					mesh1Shader = Fog;
-					mesh2Shader = Fog;
-					mesh3Shader = Fog;
+					treeShader = Fog;
+					monkeyShader = Fog;
+					ivysaurShader = Fog;
 					break;
 				case SDLK_8:
-					mesh1Shader = Diffuse;
-					mesh2Shader = Diffuse;
-					mesh3Shader = Diffuse;
+					treeShader = BlinnPhong;
+					monkeyShader = BlinnPhong;
+					ivysaurShader = Rim;
 					break;
 				case SDLK_9:
-					mesh1Shader = Blend;
-					mesh2Shader = Blend;
-					mesh3Shader = Blend;
+					treeShader = Blend;
+					monkeyShader = Blend;
+					ivysaurShader = Blend;
 					break;
 				
 				}
@@ -292,6 +298,11 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 		SetGlass(trans);
 		glass.Update(transform, myCamera);
 		break;
+	case BlinnPhong:
+		blinnPhong.Bind();
+		SetBlinnPhong();
+		blinnPhong.Update(transform, myCamera);
+		break;
 	}
 }
 
@@ -318,6 +329,14 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 	 explode.SetMatrix4("v_pos", trans.GetModel());
 	 explode.SetFloat("time", 0.1f + (counter * 15));
 
+ }
+
+ void MainGame::SetBlinnPhong()
+ {
+
+	 blinnPhong.SetVector3("viewPos", myCamera.getPos());
+	 blinnPhong.SetVector3("lightPos", ivysaur.getSpherePos());
+	 blinnPhong.SetInteger("blinn", true);
  }
 
  void MainGame::SetFog(Transform trans, glm::vec3 spherePos)
@@ -355,6 +374,8 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 {
 	brickTexture.LoadTexture("..\\res\\bricks.jpg");
 	waterTexture.LoadTexture("..\\res\\water.jpg");
+	grassTexture.LoadTexture("..\\res\\grass.png");
+
 }
 
 void MainGame::drawGame()
@@ -364,39 +385,39 @@ void MainGame::drawGame()
 	LoadTextures();
 	
 
-	UpdateTransforms(mesh1Transform, glm::vec3(sinf(counter), 0.5, 0.0),
+	UpdateTransforms(treeTransform, glm::vec3(sinf(counter), 0.5, 0.0),
 		glm::vec3(0.0, counter * 2, 0.0),
 		glm::vec3(0.1, 0.1, 0.1));
 
-	UpdateModel(mesh1Transform);
-	UpdateShader(mesh1Shader, mesh1Transform, mesh1.getSpherePos());
-	brickTexture.Bind(0);
-	mesh1.draw();
-	mesh1.updateSphereData(*transform.GetPos(), 0.62f);
+	UpdateModel(treeTransform);
+	UpdateShader(treeShader, treeTransform, tree.getSpherePos());
+	grassTexture.Bind(0);
+	tree.draw();
+	tree.updateSphereData(*transform.GetPos(), 0.62f);
 	
 
 	
 
-	UpdateTransforms(mesh2Transform, glm::vec3(-sinf(counter), -1.0, -sinf(counter) * 5),
-		glm::vec3(0.0, counter * 2, 0.0),
+	UpdateTransforms(monkeyTransform, glm::vec3(-sinf(counter), -1.0, -sinf(counter) * 5),
+		glm::vec3(0.0,/* counter **/ 2, 0.0),
 		glm::vec3(0.6, 0.6, 0.6));
 
-	UpdateModel(mesh2Transform);
-	UpdateShader(mesh2Shader, mesh2Transform, mesh2.getSpherePos());
-	brickTexture.Bind(0);
-	mesh2.draw();
-	mesh2.updateSphereData(*transform.GetPos(), 0.62f);
+	UpdateModel(monkeyTransform);
+	UpdateShader(monkeyShader, monkeyTransform, monkey.getSpherePos());
+	grassTexture.Bind(0);
+	monkey.draw();
+	monkey.updateSphereData(*transform.GetPos(), 0.62f);
 
 				
-	UpdateTransforms(mesh3Transform, glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)),
+	UpdateTransforms(ivysaurTransform, glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)),
 		glm::vec3(glm::vec3(0.0, counter * 2, 0.0)),
 		glm::vec3(0.6, 0.6, 0.6));
 
-	UpdateModel(mesh3Transform);
-	UpdateShader(mesh3Shader, mesh3Transform, mesh3.getSpherePos());
-	brickTexture.Bind(0);
-	mesh3.draw();
-	mesh3.updateSphereData(*transform.GetPos(), 0.62f);
+	UpdateModel(ivysaurTransform);
+	UpdateShader(ivysaurShader, ivysaurTransform, ivysaur.getSpherePos());
+	grassTexture.Bind(0);
+	ivysaur.draw();
+	ivysaur.updateSphereData(*transform.GetPos(), 0.62f);
 
 
 	counter = counter + 0.05f;

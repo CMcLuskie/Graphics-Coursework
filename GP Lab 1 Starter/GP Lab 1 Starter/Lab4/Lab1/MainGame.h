@@ -18,7 +18,7 @@ public:
 	~MainGame();
 
 	void run();
-	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode, Fog, Diffuse, Blend, Glass};
+	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode, Fog, Diffuse, Blend, Glass, BlinnPhong};
 
 	Shader standardShader;
 	Shader noiseShader;
@@ -29,15 +29,18 @@ public:
 	Shader ripple;
 	Shader explode;
 	Shader fog;
-	Shader diffuse;
 	Shader blend;
 	Shader glass;
 
+	Shader diffuse;
+	Shader blinnPhong;
+
+
 private:
 
-	ShaderTypes mesh1Shader;
-	ShaderTypes mesh2Shader;
-	ShaderTypes mesh3Shader;
+	ShaderTypes treeShader;
+	ShaderTypes monkeyShader;
+	ShaderTypes ivysaurShader;
 
 	
 
@@ -62,12 +65,13 @@ private:
 	void SetFog(Transform trans, glm::vec3 spherePos);
 	void SetDiffuse(Transform trans, glm::vec3 spherePos);
 	void SetGlass(Transform trans);
+	void SetBlinnPhong();
 
 	Display _gameDisplay;
 	GameState _gameState;
-	Mesh mesh1;
-	Mesh mesh2;
-	Mesh mesh3;
+	Mesh tree;
+	Mesh monkey;
+	Mesh ivysaur;
 	Camera myCamera;
 	Audio audioDevice;
 
@@ -77,7 +81,7 @@ private:
 
 	Texture brickTexture;
 	Texture waterTexture;
-
+	Texture grassTexture;
 	
 //	Uniform uniform;
 };
