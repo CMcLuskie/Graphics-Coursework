@@ -59,6 +59,9 @@ private:
 	void UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spherePos);
 	void LoadTextures();
 
+	void SetBlur();
+	void SetRim();
+	void SetToon();
 	void SetRimToon(Transform trans, glm::vec3 spherePos);
 	void SetRipple();
 	void SetExplosion(Transform trans);

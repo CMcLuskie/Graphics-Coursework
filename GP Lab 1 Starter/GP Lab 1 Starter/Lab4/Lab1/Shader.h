@@ -57,7 +57,8 @@ public:
 	// ------------------------------------------------------------------------
 	void SetVector2(const std::string &name, const glm::vec2 &value) const
 	{
-		glUniform2fv(glGetUniformLocation(program, name.c_str()), 1, &value[0]);
+		glUniform2fv(glGetUniformLocation
+			(program, name.c_str()), 1, &value[0]);
 
 		if ((glGetUniformLocation(program, name.c_str()) == -1))
 		{

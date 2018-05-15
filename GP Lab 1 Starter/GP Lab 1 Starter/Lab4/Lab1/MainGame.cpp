@@ -170,7 +170,7 @@ void MainGame::processInput()
 					ivysaurShader = RimToon;
 					break;
 				case SDLK_5:
-					treeShader = Glass;
+					treeShader = Toon;
 					monkeyShader = Glass;
 					ivysaurShader = Glass;
 					break;
@@ -255,14 +255,17 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 		break;
 	case Blur:
 		blurShader.Bind();
+		SetBlur();
 		blurShader.Update(transform, myCamera);
 		break;
 	case Rim:
 		rimShader.Bind();
+		SetRim();
 		rimShader.Update(transform, myCamera);
 		break;
 	case Toon:
 		toonShader.Bind();
+		SetToon();
 		toonShader.Update(transform, myCamera);
 		break;
 	case RimToon:
@@ -306,12 +309,32 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 	}
 }
 
+void MainGame::SetBlur()
+{
+	blurShader.SetBoolean("horizontal", true);
+}
+
+void MainGame::SetRim()
+{
+	rimShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	rimShader.SetMatrix4("u_pm", myCamera.GetProj());
+	/*rimShader.SetMatrix4("v_pos", transform.GetModel());
+	rimShader.SetVector3 ("v_norm", ivysaur.):*/
+}
+
+void MainGame::SetToon()
+{
+	toonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+}
+
  void MainGame::SetRimToon(Transform trans, glm::vec3 spherePos)
 {
-
-	 rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	 //Rim
 	 rimToonShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
 	 rimToonShader.SetMatrix4("u_pm", myCamera.GetProj());
+	 //Toon
+	 rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	 //RimToon
 	 rimToonShader.SetMatrix4("v_pos", transform.GetModel());
 
 }
@@ -324,11 +347,12 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
  void MainGame :: SetExplosion(Transform trans)
  {
 	 explode.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
-	 explode.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 explode.SetMatrix4("u_vm",
+		 myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
 	 explode.SetMatrix4("u_pm", myCamera.GetProj());
-	 explode.SetMatrix4("v_pos", trans.GetModel());
-	 explode.SetFloat("time", 0.1f + (counter * 15));
+	 explode.SetMatrix4("v_pos", transform.GetModel());
 
+	 explode.SetFloat("time", 0.1f + (counter * 7.5f));
  }
 
  void MainGame::SetBlinnPhong()
@@ -341,19 +365,16 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 
  void MainGame::SetFog(Transform trans, glm::vec3 spherePos)
  {
+	 //Rim-Toon
 	 fog.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
-
-	 fog.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 fog.SetMatrix4("u_vm", 
+		 myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
 	 fog.SetMatrix4("u_pm", myCamera.GetProj());
-
-
-	 fog.SetVector3("fogColor", glm::vec3(1, 0, 1));
+	 //Fog
+	 fog.SetVector3("fogColor", glm::vec3(0.2, 0, 0.2));
 	 fog.SetFloat("minDist", -5.0f);
 	 fog.SetFloat("maxDist", 5.0f);
-
 	 fog.SetFloat("zpos", spherePos.z);
-
-
  }
 
  void MainGame::SetGlass(Transform trans)
@@ -380,7 +401,7 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 
 void MainGame::drawGame()
 {
-	_gameDisplay.clearDisplay(0.0f, 0.0f, 0.0f, 1.0f);
+	_gameDisplay.clearDisplay(0.5f, 1.0f, 0.5f, 1.0f);
 	
 	LoadTextures();
 	

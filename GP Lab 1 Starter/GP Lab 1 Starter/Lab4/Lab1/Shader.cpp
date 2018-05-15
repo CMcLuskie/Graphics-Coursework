@@ -57,7 +57,7 @@ void Shader::Initialise(const std::string vertexShader, const std::string fragSh
 	glBindAttribLocation(program, 2, "normals");
 
 	glLinkProgram(program);
-	CheckShaderError(program, GL_LINK_STATUS, true, "Error: Shader program cunting failed");
+	CheckShaderError(program, GL_LINK_STATUS, true, "Error: Shader program Linking failed");
 
 	glValidateProgram(program);
 	CheckShaderError(program, GL_VALIDATE_STATUS, true, "Error: Shader program not valid");
