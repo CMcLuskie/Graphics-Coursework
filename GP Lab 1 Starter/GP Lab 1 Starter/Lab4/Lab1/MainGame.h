@@ -17,8 +17,8 @@ public:
 	MainGame();
 	~MainGame();
 
-	void run();
-	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode, Fog, Diffuse, Blend, Glass, BlinnPhong, Normal};
+	void daeItLikeForrest();
+	enum ShaderTypes { Standard, Noise, Blur, Rim, Toon, RimToon, Ripple, Explode, Fog, Diffuse, Blend, Glass, BlinnPhong, Normal, ExplodeNormal};
 
 	Shader standardShader;
 	Shader noiseShader;
@@ -32,7 +32,7 @@ public:
 	Shader blend;
 	Shader glass;
 	Shader normal;
-
+	Shader explodeNormal;
 
 	Shader diffuse;
 	Shader blinnPhong;
@@ -46,10 +46,13 @@ private:
 
 	
 
-	void initSystems();
-	void processInput();
-	void gameLoop();
-	void drawGame();
+	void InitialiseSystems();
+	void Input();
+	void Loop();
+	void Draw();
+	void DrawTree();
+	void DrawIvysaur();
+	void DrawMonkey();
 	void CreatePointers();
 	void LoadModels();
 	void InitialiseShaders();
@@ -72,13 +75,14 @@ private:
 	void SetDiffuse(Transform trans, glm::vec3 spherePos);
 	void SetGlass(Transform trans);
 	void SetBlinnPhong();
+	void SetNormalExplode();
 
-	Display _gameDisplay;
-	GameState _gameState;
+	Display display;
+	GameState state;
 	Mesh tree;
 	Mesh monkey;
 	Mesh ivysaur;
-	Camera myCamera;
+	Camera camera;
 	Audio audioDevice;
 
 	float counter;

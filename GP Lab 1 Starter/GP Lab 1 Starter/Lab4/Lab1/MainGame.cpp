@@ -11,7 +11,7 @@ Transform ivysaurTransform;
 
 MainGame::MainGame()
 {
-	_gameState = GameState::PLAY;
+	state = GameState::PLAY;
 	
 	CreatePointers();
 }
@@ -20,12 +20,13 @@ MainGame::~MainGame()
 {
 }
 
-void MainGame::run()
+void MainGame::daeItLikeForrest()
 {
-	initSystems(); 
-	gameLoop();
+	InitialiseSystems(); 
+	Loop();
 }
 
+///<This Creates all the pointers necessary for the game>
 void MainGame::CreatePointers()
 {
 	Display* _gameDisplay = new Display(); //new display
@@ -40,36 +41,35 @@ void MainGame::CreatePointers()
 	Texture* grassTexture();
 	
 	Shader* standard();
-	Shader* noise();
 	Shader* blur();
 	Shader* rim();
 	Shader* toon();
 	Shader* rimToonShader();
-	Shader* ripple();
 	Shader* explode();
 	Shader* toonFog();
 	Shader* blinnPhon();
 	Shader* normal();
+	Shader* explodeNormal();
 	
 	Transform* mesh1Trans();
 	Transform* mesh2Trans();
 	Transform* mesh3Trans();
 }
-void MainGame::initSystems()
+
+///<This will initialise objects and load data from files>
+void MainGame::InitialiseSystems()
 {
-	_gameDisplay.initDisplay(); 
+	display.initDisplay(); 
 	whistle = audioDevice.loadSound("..\\res\\bang.wav");
 	backGroundMusic = audioDevice.loadSound("..\\res\\background.wav");
-	
-	
 	LoadModels();
 	InitialiseShaders();
-	
-	myCamera.initCamera(glm::vec3(0, 0, -5), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
+	camera.initCamera(glm::vec3(0, 0, -5), 70.0f, (float)display.getWidth()/display.getHeight(), 0.01f, 1000.0f);
 
 	counter = 1.0f;
 }
 
+///<This Loads Models from files>
 void MainGame::LoadModels()
 {
 	tree.loadModel("..\\res\\Models\\tree.obj");
@@ -83,6 +83,7 @@ void MainGame::InitialiseTransforms()
 
 }
 
+///<This takes in parameters to update a transform >
 void MainGame::UpdateTransforms(Transform trans, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
 {
 	trans.SetPos(pos);
@@ -93,46 +94,44 @@ void MainGame::UpdateTransforms(Transform trans, glm::vec3 pos, glm::vec3 rot, g
 	transform.SetRot(rot);
 	transform.SetScale(scale);
 }
+
+///<This Loads the Shaders>
 void  MainGame::InitialiseShaders()
 {
-	standardShader.Initialise("..\\res\\Shaders\\shader.vert", "..\\res\\Shaders\\shader.frag");
-	noiseShader.Initialise("..\\res\\Shaders\\shaderNoise.vert", "..\\res\\Shaders\\shaderNoise.frag");
-	blurShader.Initialise("..\\res\\Shaders\\shaderBlur.vert", "..\\res\\Shaders\\shaderBlur.frag");
-	rimShader.Initialise("..\\res\\Shaders\\shaderRim.vert", "..\\res\\Shaders\\shaderRim.frag");
-	toonShader.Initialise("..\\res\\Shaders\\shaderToon.vert", "..\\res\\Shaders\\shaderToon.frag");
-	rimToonShader.Initialise("..\\res\\Shaders\\shaderRimToon.vert", "..\\res\\Shaders\\shaderRimToon.frag");
-	//ripple.Initialise("..\\res\\Shaders\\shaderToonRipple.vert", "..\\res\\Shaders\\shaderToonRipple.frag");
-	explode.Initialise("..\\res\\Shaders\\shaderExplode.vert", "..\\res\\Shaders\\shaderExplode.frag", "..\\res\\Shaders\\shaderExplode.geom");
-	fog.Initialise("..\\res\\Shaders\\shaderToonFog.vert", "..\\res\\Shaders\\shaderToonFog.frag");
-	blend.Initialise("..\\res\\Shaders\\shaderBlend.vert", "..\\res\\Shaders\\shaderBlend.frag");
-	glass.Initialise("..\\res\\Shaders\\shaderGlass.vert", "..\\res\\Shaders\\shaderGlass.frag");
-	normal.Initialise("..\\res\\Shaders\\shaderNormal.vert", "..\\res\\Shaders\\shaderNormal.frag", "..\\res\\Shaders\\shaderNormal.geom");
+	//loads shaders from files
+	standardShader.InitialiseShader("..\\res\\Shaders\\shader.vert", "..\\res\\Shaders\\shader.frag");
+	blurShader.InitialiseShader("..\\res\\Shaders\\shaderBlur.vert", "..\\res\\Shaders\\shaderBlur.frag");
+	rimShader.InitialiseShader("..\\res\\Shaders\\shaderRim.vert", "..\\res\\Shaders\\shaderRim.frag");
+	toonShader.InitialiseShader("..\\res\\Shaders\\shaderToon.vert", "..\\res\\Shaders\\shaderToon.frag");
+	rimToonShader.InitialiseShader("..\\res\\Shaders\\shaderRimToon.vert", "..\\res\\Shaders\\shaderRimToon.frag");
+	explode.InitialiseShader("..\\res\\Shaders\\shaderExplode.vert", "..\\res\\Shaders\\shaderExplode.frag", "..\\res\\Shaders\\shaderExplode.geom");
+	fog.InitialiseShader("..\\res\\Shaders\\shaderToonFog.vert", "..\\res\\Shaders\\shaderToonFog.frag");
+	normal.InitialiseShader("..\\res\\Shaders\\shaderNormal.vert", "..\\res\\Shaders\\shaderNormal.frag", "..\\res\\Shaders\\shaderNormal.geom");
+	explodeNormal.InitialiseShader("..\\res\\Shaders\\shaderNormalExplode.vert", "..\\res\\Shaders\\shaderNormalExplode.frag", "..\\res\\Shaders\\shaderNormalExplode.geom");
+	blinnPhong.InitialiseShader("..\\res\\Lighting\\blinnPhong.vert", "..\\res\\Lighting\\blinnPhong.frag");
 
-
-	//diffuse.Initialise("..\\res\\Lighting\\diffuseLighting.vert", "..\\res\\Lighting\\diffuseLighting.frag");
-	blinnPhong.Initialise("..\\res\\Lighting\\blinnPhong.vert", "..\\res\\Lighting\\blinnPhong.frag");
-
-
-
-
-
-
+	///the starting shaders are set 
 	treeShader = Explode;
 	monkeyShader = Fog;
 	ivysaurShader = RimToon;
 }
-void MainGame::gameLoop()
+///<The Main game loop>
+void MainGame::Loop()
 {
-	while (_gameState != GameState::EXIT)
+	while (state != GameState::EXIT)
 	{
-		processInput();
-		drawGame();
+		Input();
+		Draw();
+		//checks for collision
 		collision(tree.getSpherePos(), tree.getSphereRadius(), monkey.getSpherePos(), monkey.getSphereRadius());
+		//iterates counter
+		counter = counter + 0.05f;
 		//playAudio(backGroundMusic, glm::vec3(0.0f,0.0f,0.0f));
 	}
 }
 
-void MainGame::processInput()
+///<this checks input>
+void MainGame::Input()
 {
 	SDL_Event evnt;
 
@@ -144,7 +143,7 @@ void MainGame::processInput()
 				switch (evnt.key.keysym.sym)
 				{
 				case SDLK_ESCAPE:
-					_gameState = GameState::EXIT;
+					state = GameState::EXIT;
 
 					break;
 				case SDLK_0:
@@ -183,19 +182,19 @@ void MainGame::processInput()
 					ivysaurShader = Explode;
 					break;
 				case SDLK_7:
-					treeShader = Fog;
-					monkeyShader = Fog;
-					ivysaurShader = Fog;
+					treeShader = ExplodeNormal;
+					monkeyShader = ExplodeNormal;
+					ivysaurShader = ExplodeNormal;
 					break;
 				case SDLK_8:
 					treeShader = BlinnPhong;
 					monkeyShader = BlinnPhong;
 					ivysaurShader = Rim;
 					break;
-				case SDLK_9:
-					treeShader = Blend;
-					monkeyShader = Blend;
-					ivysaurShader = Blend;
+				case SDLK_9:		
+					treeShader = Fog;
+					monkeyShader = Fog;
+					ivysaurShader = Fog;
 					break;
 				
 				}
@@ -212,7 +211,7 @@ bool MainGame::collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2
 
 	if (distance < (m1Rad + m2Rad))
 	{
-		audioDevice.setlistener(myCamera.getPos(), m1Pos); //add bool to mesh
+		audioDevice.setlistener(camera.getPos(), m1Pos); //add bool to mesh
 		//playAudio(whistle, m1Pos);
 		return true;
 	}
@@ -247,99 +246,109 @@ void MainGame::UpdateModel(Transform trans)
 
 }
 
+///<this is where the shaders are bound, uniforms are set, and updated>
 void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spherePos)
 {
 
 	switch (shader)
 	{
 	default:
-		standardShader.Bind();
-		standardShader.Update(transform, myCamera);
+		standardShader.BindShader();
+		standardShader.UpdateShader(transform, camera);
 		break;
 	case Blur:
-		blurShader.Bind();
+		blurShader.BindShader();
 		SetBlur();
-		blurShader.Update(transform, myCamera);
+		blurShader.UpdateShader(transform, camera);
 		break;
 	case Rim:
-		rimShader.Bind();
+		rimShader.BindShader();
 		SetRim();
-		rimShader.Update(transform, myCamera);
+		rimShader.UpdateShader(transform, camera);
 		break;
 	case Toon:
-		toonShader.Bind();
+		toonShader.BindShader();
 		SetToon();
-		toonShader.Update(transform, myCamera);
+		toonShader.UpdateShader(transform, camera);
 		break;
 	case RimToon:
-		rimToonShader.Bind();
+		rimToonShader.BindShader();
 		SetRimToon(trans, spherePos);
-		rimToonShader.Update(transform, myCamera);
+		rimToonShader.UpdateShader(transform, camera);
 		break;
 	case Ripple:
-		ripple.Bind();
+		ripple.BindShader();
 		SetRipple();
-		ripple.Update(transform, myCamera);
+		ripple.UpdateShader(transform, camera);
 	case Explode:
-		explode.Bind();
+		explode.BindShader();
 		SetExplosion(trans);
-		explode.Update(transform, myCamera);
+		explode.UpdateShader(transform, camera);
 		break;
 	case Fog:
-		fog.Bind();
+		fog.BindShader();
 		SetFog(trans, spherePos);
-		fog.Update(transform, myCamera);
+		fog.UpdateShader(transform, camera);
 		break;
 	case Diffuse:
-		diffuse.Bind();
+		diffuse.BindShader();
 		SetDiffuse(trans, spherePos);
-		diffuse.Update(transform, myCamera);
+		diffuse.UpdateShader(transform, camera);
 		break;
 	case Blend:
-		blend.Bind();
-		blend.Update(transform, myCamera);
+		blend.BindShader();
+		blend.UpdateShader(transform, camera);
 		break;
 	case Glass:
-		glass.Bind();
+		glass.BindShader();
 		SetGlass(trans);
-		glass.Update(transform, myCamera);
+		glass.UpdateShader(transform, camera);
 		break;
 	case BlinnPhong:
-		blinnPhong.Bind();
+		blinnPhong.BindShader();
 		SetBlinnPhong();
-		blinnPhong.Update(transform, myCamera);
+		blinnPhong.UpdateShader(transform, camera);
 		break;
 	case Normal:
-		normal.Bind();
+		normal.BindShader();
 		SetNormal();
-		normal.Update(transform, myCamera);
+		normal.UpdateShader(transform, camera);
+		break;
+	case ExplodeNormal:
+		explodeNormal.BindShader();
+		SetNormalExplode();
+		explodeNormal.UpdateShader(transform, camera);
 		break;
 	}
 }
 
+///<Sets Blur>
 void MainGame::SetBlur()
 {
 	blurShader.SetBoolean("horizontal", true);
 }
 
+///<Sets Rim>
 void MainGame::SetRim()
 {
-	rimShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	rimShader.SetMatrix4("u_pm", myCamera.GetProj());
+	rimShader.SetMatrix4("u_vm", camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	rimShader.SetMatrix4("u_pm", camera.GetProj());
 	/*rimShader.SetMatrix4("v_pos", transform.GetModel());
 	rimShader.SetVector3 ("v_norm", ivysaur.):*/
 }
 
+///<Sets Toon>
 void MainGame::SetToon()
 {
 	toonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
 }
 
+///<Sets RimToon>
  void MainGame::SetRimToon(Transform trans, glm::vec3 spherePos)
 {
 	 //Rim
-	 rimToonShader.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	 rimToonShader.SetMatrix4("u_pm", myCamera.GetProj());
+	 rimToonShader.SetMatrix4("u_vm", camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 rimToonShader.SetMatrix4("u_pm", camera.GetProj());
 	 //Toon
 	 rimToonShader.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
 	 //RimToon
@@ -352,43 +361,68 @@ void MainGame::SetToon()
 	// ripple.SetFloat("time", SDL_GetTicks());
  }
 
+ ///<Sets Explosion>
  void MainGame :: SetExplosion(Transform trans)
  {
+	 //Toon
 	 explode.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	 //Rim
 	 explode.SetMatrix4("u_vm",
-		 myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	 explode.SetMatrix4("u_pm", myCamera.GetProj());
+		 camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 explode.SetMatrix4("u_pm", camera.GetProj());
+	 //Rim Toon
 	 explode.SetMatrix4("v_pos", transform.GetModel());
-
+	 //Explode
 	 explode.SetFloat("time", 0.1f + (counter * 7.5f));
  }
 
-
+ ///<Sets Normal shader>
  void MainGame::SetNormal()
  {
+	 //Normal
 	 normal.SetFloat("magnitude", 0.2f);
 	 //Rim
-	 normal.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	 normal.SetMatrix4("u_pm", myCamera.GetProj());
+	 normal.SetMatrix4("u_vm", camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 normal.SetMatrix4("u_pm", camera.GetProj());
 	 //Toon
 	 normal.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
 	 //RimToon
 	 normal.SetMatrix4("v_pos", transform.GetModel());
  }
+
+ ///<Sets normal-Explode SHader>
+ void MainGame::SetNormalExplode()
+ {
+	 //Normal
+	 normal.SetFloat("magnitude", 0.2f);
+	 //explode
+	 explodeNormal.SetFloat("time", 0.1f + (counter * 3));
+	 //Rim
+	 explodeNormal.SetMatrix4("u_vm",
+		 camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 explodeNormal.SetMatrix4("u_pm", camera.GetProj());
+	 //Toon
+	 explodeNormal.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	 //RimToon
+	 explodeNormal.SetMatrix4("v_pos", transform.GetModel());
+ }
+ 
+ ///<Sets Blinn Phong Lighting>
  void MainGame::SetBlinnPhong()
  {
-	 blinnPhong.SetVector3("viewPos", myCamera.getPos());
+	 blinnPhong.SetVector3("viewPos", camera.getPos());
 	 blinnPhong.SetVector3("lightPos", ivysaur.getSpherePos());
 	 blinnPhong.SetInteger("blinn", true);
  }
 
+ ///<Sets Fog>
  void MainGame::SetFog(Transform trans, glm::vec3 spherePos)
  {
 	 //Rim-Toon
 	 fog.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
 	 fog.SetMatrix4("u_vm", 
-		 myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	 fog.SetMatrix4("u_pm", myCamera.GetProj());
+		 camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 fog.SetMatrix4("u_pm", camera.GetProj());
 	 //Fog
 	 fog.SetVector3("fogColor", glm::vec3(0.2, 0, 0.2));
 	 fog.SetFloat("minDist", -5.0f);
@@ -396,20 +430,23 @@ void MainGame::SetToon()
 	 fog.SetFloat("zpos", spherePos.z);
  }
 
+ ///<This isnot usesd>
  void MainGame::SetGlass(Transform trans)
  {
 	 glass.SetMatrix4("u_modelMatrix", trans.GetModel());
-	 glass.SetMatrix4("u_viewProjectionMatrix", myCamera.GetViewProjection());
-	 glass.SetMatrix4("u_normalMatrix", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
-	 glass.SetVector4("u_camera", glm::vec4(myCamera.getPos().x, myCamera.getPos().y, myCamera.getPos().z, 1.0));
+	 glass.SetMatrix4("u_viewProjectionMatrix", camera.GetViewProjection());
+	 glass.SetMatrix4("u_normalMatrix", camera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 glass.SetVector4("u_camera", glm::vec4(camera.getPos().x, camera.getPos().y, camera.getPos().z, 1.0));
  }
 
+ ///<This isnot usesd>
  void MainGame::SetDiffuse(Transform trans, glm::vec3 spherePos)
  {
 	 diffuse.SetVector3("lightPos", spherePos);
 
  }
 
+ ///<Loads textures from files>
  void MainGame::LoadTextures() 
 {
 	brickTexture.LoadTexture("..\\res\\bricks.jpg");
@@ -418,13 +455,26 @@ void MainGame::SetToon()
 
 }
 
-void MainGame::drawGame()
+ ///<Draws the game>
+void MainGame::Draw()
 {
-	_gameDisplay.clearDisplay(0.5f, 0.5f, 1.0f, 1.0f);
-	
+	//sets backgorund clolour
+	display.clearDisplay(0.5f, 0.5f, 1.0f, 1.0f);
+	//Loads Textures
 	LoadTextures();
-	
+	//Draws the models
+	DrawTree();
+	DrawIvysaur();
+	DrawMonkey();
 
+	glEnableClientState(GL_COLOR_ARRAY); 
+	glEnd();
+	//swaps buffer witht the second, hidden, window
+	display.swapBuffer();
+} 
+
+void MainGame::DrawTree()
+{
 	UpdateTransforms(treeTransform, glm::vec3(sinf(counter), 0.5, 0.0),
 		glm::vec3(0.0, counter * 2, 0.0),
 		glm::vec3(0.1, 0.1, 0.1));
@@ -434,21 +484,10 @@ void MainGame::drawGame()
 	grassTexture.Bind(0);
 	tree.draw();
 	tree.updateSphereData(*transform.GetPos(), 0.62f);
-	
+}
 
-	
-
-	UpdateTransforms(monkeyTransform, glm::vec3(-sinf(counter), -1.0, -sinf(counter) * 5),
-		glm::vec3(0.0,/* counter **/ 2, 0.0),
-		glm::vec3(0.6, 0.6, 0.6));
-
-	UpdateModel(monkeyTransform);
-	UpdateShader(monkeyShader, monkeyTransform, monkey.getSpherePos());
-	grassTexture.Bind(0);
-	monkey.draw();
-	monkey.updateSphereData(*transform.GetPos(), 0.62f);
-
-				
+void MainGame::DrawIvysaur()
+{
 	UpdateTransforms(ivysaurTransform, glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)),
 		glm::vec3(glm::vec3(0.0, counter * 2, 0.0)),
 		glm::vec3(0.6, 0.6, 0.6));
@@ -458,12 +497,17 @@ void MainGame::drawGame()
 	grassTexture.Bind(0);
 	ivysaur.draw();
 	ivysaur.updateSphereData(*transform.GetPos(), 0.62f);
+}
 
+void MainGame::DrawMonkey()
+{
+	UpdateTransforms(monkeyTransform, glm::vec3(-sinf(counter), -1.0, -sinf(counter) * 5),
+		glm::vec3(0.0,/* counter **/ 2, 0.0),
+		glm::vec3(0.6, 0.6, 0.6));
 
-	counter = counter + 0.05f;
-
-	glEnableClientState(GL_COLOR_ARRAY); 
-	glEnd();
-
-	_gameDisplay.swapBuffer();
-} 
+	UpdateModel(monkeyTransform);
+	UpdateShader(monkeyShader, monkeyTransform, monkey.getSpherePos());
+	grassTexture.Bind(0);
+	monkey.draw();
+	monkey.updateSphereData(*transform.GetPos(), 0.62f);
+}

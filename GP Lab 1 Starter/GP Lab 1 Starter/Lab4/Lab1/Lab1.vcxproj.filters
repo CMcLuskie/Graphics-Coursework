@@ -224,5 +224,14 @@
     <None Include="..\res\Shaders\shaderNormal.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="..\res\Shaders\shaderNormalExplode.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderNormalExplode.geom">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderNormalExplode.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,3 +1,8 @@
 ﻿  MainGame.cpp
-e:\github\graphics-coursework\gp lab 1 starter\gp lab 1 starter\lab4\lab1\maingame.h(11): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Lab1.vcxproj -> E:\Github\Graphics-Coursework\GP Lab 1 Starter\GP Lab 1 Starter\Lab4\Debug\Lab1.exe
+c:\users\cmclus200\documents\github\graphics-coursework\gp lab 1 starter\gp lab 1 starter\lab4\lab1\maingame.h(11): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  Uniform.cpp
+  Lab1.vcxproj -> C:\Users\CMCLus200\Documents\GitHub\Graphics-Coursework\GP Lab 1 Starter\GP Lab 1 Starter\Lab4\Debug\Lab1.exe
+  Lab1.vcxproj -> C:\Users\CMCLus200\Documents\GitHub\Graphics-Coursework\GP Lab 1 Starter\GP Lab 1 Starter\Lab4\Debug\Lab1.pdb (Partial PDB)

@@ -6,19 +6,22 @@ uniform vec3 lightDir;
  
 layout( location = 0 ) out vec4 fragcolor;
  
-in vec3 v_norm;
+in VS_OUT {
+    vec3 normal;
+} fs_in;
+
 uniform mat4 v_pos; 
  
 void main() {
  
-	vec3 n = normalize(mat3(u_vm) * v_norm);      // convert normal to view space
+	vec3 n = normalize(mat3(u_vm) * fs_in.normal);      // convert normal to view space
 	vec3 p = vec3((u_pm) * v_pos);                // position in clip space
 	vec3 v = normalize(p);                        // normalised eye vector
 	float vdn = 0.6 - max(dot(v, n), 0.0);        // the rim contribution
 	
 	float intensity;
 	vec4 color;
-	intensity = dot(lightDir,v_norm);
+	intensity = dot(lightDir,fs_in.normal);
 
 	if (intensity > 0.95)
 		color = vec4(1.0,0.5,0.5,1.0);

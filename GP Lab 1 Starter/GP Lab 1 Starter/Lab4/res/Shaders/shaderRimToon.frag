@@ -22,8 +22,9 @@ void main() {
  
 	float intensity;
 	vec4 color;
-	intensity = dot(lightDir,v_norm);
+	intensity = dot(lightDir,v_norm); //sets intensity using the dot product
 
+	//sets the final toon colour
 	if (intensity > 0.95)
 		color = vec4(1.0,0.5,0.5,1.0);
 	else if (intensity > 0.5)
@@ -34,5 +35,5 @@ void main() {
 		color = vec4(0.2,0.1,0.1,1.0);
 
   fragcolor.a = 0.6;
-  fragcolor.rgb = vec3(smoothstep(0.4, 0.8, vdn())) + vec3(color.x,color.y,color.z);
+  fragcolor.rgb = vec3(smoothstep(0.4, 0.8, vdn())) + vec3(color.x,color.y,color.z); //combines toon and toon rim
 }

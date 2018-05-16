@@ -25,8 +25,9 @@ vec3 ToonRim() {
  
  	float intensity;
 	vec4 color;
-	intensity = dot(lightDir,v_norm);
+	intensity = dot(lightDir,v_norm);//sets intensity using the dot product
 
+		//sets final toon colour in relationt othe intensity
 	if (intensity > 0.95)
 		color = vec4(0.6,0.5,0.5,1.0);
 	else if (intensity > 0.5)
@@ -43,12 +44,12 @@ vec3 ToonRim() {
  void main() 
  {
 
-float dist = abs( zpos );
-float fogFactor = (maxDist - dist) / (maxDist - minDist);
-fogFactor = clamp( fogFactor, 0.0, 1.0 );
+float dist = abs( zpos ); //gets the distance by ensure the zpos is a positive value
+float fogFactor = (maxDist - dist) / (maxDist - minDist); //gets the fog value using a formula thats explained in the report
+fogFactor = clamp( fogFactor, 0.0, 1.0 ); // returns a value between 0 and 1 that is also closest to fogFactor
 vec3 toonRim = ToonRim();
 
-vec3 color = mix( fogColor, toonRim, fogFactor);
+vec3 color = mix( fogColor, toonRim, fogFactor); //mixes the fogcolour, toon rim colour, and the fogfactor together
 fragcolor = vec4(color, 1.0);
 
 }
