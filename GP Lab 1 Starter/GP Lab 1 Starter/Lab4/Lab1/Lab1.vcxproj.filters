@@ -215,5 +215,14 @@
     <None Include="..\res\Lighting\diffuseLighting.vert">
       <Filter>Resource Files\Lighting</Filter>
     </None>
+    <None Include="..\res\Shaders\shaderNormal.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderNormal.geom">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\res\Shaders\shaderNormal.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

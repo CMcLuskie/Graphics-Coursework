@@ -49,6 +49,7 @@ void MainGame::CreatePointers()
 	Shader* explode();
 	Shader* toonFog();
 	Shader* blinnPhon();
+	Shader* normal();
 	
 	Transform* mesh1Trans();
 	Transform* mesh2Trans();
@@ -105,6 +106,8 @@ void  MainGame::InitialiseShaders()
 	fog.Initialise("..\\res\\Shaders\\shaderToonFog.vert", "..\\res\\Shaders\\shaderToonFog.frag");
 	blend.Initialise("..\\res\\Shaders\\shaderBlend.vert", "..\\res\\Shaders\\shaderBlend.frag");
 	glass.Initialise("..\\res\\Shaders\\shaderGlass.vert", "..\\res\\Shaders\\shaderGlass.frag");
+	normal.Initialise("..\\res\\Shaders\\shaderNormal.vert", "..\\res\\Shaders\\shaderNormal.frag", "..\\res\\Shaders\\shaderNormal.geom");
+
 
 	//diffuse.Initialise("..\\res\\Lighting\\diffuseLighting.vert", "..\\res\\Lighting\\diffuseLighting.frag");
 	blinnPhong.Initialise("..\\res\\Lighting\\blinnPhong.vert", "..\\res\\Lighting\\blinnPhong.frag");
@@ -170,9 +173,9 @@ void MainGame::processInput()
 					ivysaurShader = RimToon;
 					break;
 				case SDLK_5:
-					treeShader = Toon;
-					monkeyShader = Glass;
-					ivysaurShader = Glass;
+					treeShader = Normal;
+					monkeyShader = Normal;
+					ivysaurShader = Normal;
 					break;
 				case SDLK_6:
 					treeShader = Explode;
@@ -306,6 +309,11 @@ void MainGame::UpdateShader(ShaderTypes shader, Transform trans, glm::vec3 spher
 		SetBlinnPhong();
 		blinnPhong.Update(transform, myCamera);
 		break;
+	case Normal:
+		normal.Bind();
+		SetNormal();
+		normal.Update(transform, myCamera);
+		break;
 	}
 }
 
@@ -355,9 +363,20 @@ void MainGame::SetToon()
 	 explode.SetFloat("time", 0.1f + (counter * 7.5f));
  }
 
+
+ void MainGame::SetNormal()
+ {
+	 normal.SetFloat("magnitude", 0.2f);
+	 //Rim
+	 normal.SetMatrix4("u_vm", myCamera.GetTheBandThatDoneThatOneSongAboutWearingTheSamePairOfJeans());
+	 normal.SetMatrix4("u_pm", myCamera.GetProj());
+	 //Toon
+	 normal.SetVector3("lightDir", glm::vec3(0.5, 0.5, 0.5));
+	 //RimToon
+	 normal.SetMatrix4("v_pos", transform.GetModel());
+ }
  void MainGame::SetBlinnPhong()
  {
-
 	 blinnPhong.SetVector3("viewPos", myCamera.getPos());
 	 blinnPhong.SetVector3("lightPos", ivysaur.getSpherePos());
 	 blinnPhong.SetInteger("blinn", true);
@@ -401,7 +420,7 @@ void MainGame::SetToon()
 
 void MainGame::drawGame()
 {
-	_gameDisplay.clearDisplay(0.5f, 1.0f, 0.5f, 1.0f);
+	_gameDisplay.clearDisplay(0.5f, 0.5f, 1.0f, 1.0f);
 	
 	LoadTextures();
 	
